@@ -1,0 +1,44 @@
+# Android Studio / IntelliJ
+*.iml
+.idea/
+.kotlinc/
+.kotlin/
+
+# Gradle
+.gradle/
+build/
+app/build/
+
+# Local Android SDK
+local.properties
+
+# Native / generated build outputs
+.externalNativeBuild/
+.cxx/
+
+# Android build artifacts
+*.apk
+*.aab
+app/release/
+captures/
+
+# Local signing material — never commit private keys
+keystores/
+*.jks
+*.keystore
+*.p12
+*.pfx
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Runtime / diagnostic artifacts
+*.log
+
+# Historical manual backups — Git history replaces these
+*.backup_*
+*.bak
+*.orig

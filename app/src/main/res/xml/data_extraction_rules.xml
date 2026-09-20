@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <!-- Prototype v0.0.1 has no persisted user data yet — default include-all is fine. -->
+    </cloud-backup>
+</data-extraction-rules>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Prototype v0.0.1: no permissions declared yet.
+        SAF folder access uses ACTION_OPEN_DOCUMENT_TREE, which does not
+        require a manifest <uses-permission> entry — the system picker
+        itself grants scoped access. This is intentional: per "SAF
+        permission request (no implementation yet)" in scope, the picker is
+        wired up (see Home screen Add Game button) but nothing is persisted
+        or processed beyond receiving the result.
+    -->
+
+    <application
+        android:name=".PokeRPGPlayerApp"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PokeRPGPlayer.Splash">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.PokeRPGPlayer.Splash"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+            Sprint 8 — First Runtime Launch Boundary / GAME_PATH Injection.
+            exported="false": nothing outside this app's own process can
+            start this Activity via an implicit Intent — unchanged and
+            still correct in Sprint 53. What HAS changed: this comment
+            previously said "internal/test-only... never reachable from
+            any app screen," which is now stale documentation, not stale
+            code. Since Sprint 53, com.pokerpgplayer.app.runtime.AndroidRuntimeManager
+            (the real, production RuntimeManager) launches this exact
+            Activity via an explicit, same-process Intent when a player
+            taps Play — exported="false" does not block that, by design;
+            it only blocks a DIFFERENT app or the system from starting
+            this Activity via an implicit Intent, which was never the
+            concern here. See runtime/RuntimeActivity.kt's own updated
+            kdoc for the full explanation.
+
+            Sprint 12 hotfix — android:configChanges added. Root cause,
+            confirmed by reading SDLActivity.java directly: native SDL code
+            calls setOrientation() during normal startup (mSingleton.
+            setRequestedOrientation(...)) — a standard Android API call
+            that, without configChanges declared here, makes Android
+            destroy and recreate this entire Activity by default. This was
+            invisible to every prior sprint's test because none of them
+            had reached this point in native startup yet; Sprint 12's own
+            Espresso dialog checkpoint test was the first to run long
+            enough to expose it. Declaring these config types here tells
+            Android to keep the same Activity instance alive across an
+            orientation/screen-size change instead of recreating it,
+            matching this test's own need for one stable Activity instance
+            to observe. RuntimeActivity does not override
+            onConfigurationChanged() and is not expected to need to for
+            this purpose — SDL's own native/GL layer handles the resulting
+            resize itself, independent of the Java Activity lifecycle.
+        -->
+        <activity
+            android:name=".runtime.RuntimeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PokeRPGPlayer.Runtime.NoActionBar"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize" />
+    </application>
+
+</manifest>

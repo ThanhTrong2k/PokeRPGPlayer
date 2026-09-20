@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Splash screen colors only — Compose Material 3 theme (ui/theme/Color.kt)
+         owns all in-app colors. Kept in sync manually for now since the
+         splash theme is XML-based by platform requirement. -->
+    <color name="splash_background_light">#0A0C11</color>
+    <color name="splash_background_dark">#0A0C11</color>
+    <color name="splash_icon_tint">#2DD4BF</color>
+</resources>
